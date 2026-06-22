@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Альбом «Прошлое Лето»</title>
+<style>
+  :root {
+    --bg: #f3ece1;
+    --bg-deep: #ece1d1;
+    --ink: #4a3f33;
+    --ink-soft: #8a7a66;
+    --sage: #7d9b8c;
+    --gold: #d8a558;
+    --frame: #fbf7f0;
+    --track: #e2d6c4;
+    --shadow: rgba(74, 63, 51, 0.22);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { min-height: 100%; }
+
+  body {
+    background:
+      radial-gradient(120% 80% at 70% 0%, #f7efe1 0%, var(--bg) 45%, var(--bg-deep) 100%);
+    color: var(--ink);
+    font-family: "Iowan Old Style", "Palatino Linotype", "Georgia", serif;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(1.25rem, 4vw, 3rem);
+    gap: clamp(1.4rem, 3.5vw, 2rem);
+  }
+
+  .title {
+    font-size: clamp(1.7rem, 6.5vw, 2.7rem);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    text-align: center;
+    color: var(--ink);
+  }
+  .title em { font-style: italic; color: var(--gold); }
+
+  .stage {
+    position: relative;
+    width: min(80vw, 22rem);
+    aspect-ratio: 865 / 1080;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--frame);
+    padding: clamp(0.45rem, 2vw, 0.8rem);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.7) inset,
+      0 18px 40px -12px var(--shadow),
+      0 4px 12px -6px var(--shadow);
+  }
+
+  .photo-wrap {
+    position: relative; width: 100%; height: 100%;
+    border-radius: 3px; overflow: hidden; background: var(--bg-deep);
+  }
+  .blur {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; transform: scale(1.06); filter: blur(15px);
+    transition: opacity 0.9s ease 0.1s, filter 0.9s ease 0.1s;
+  }
+  .full {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; opacity: 0; transition: opacity 1.1s ease;
+  }
+  .full.loaded { opacity: 1; }
+  .photo-wrap.done .blur { opacity: 0; filter: blur(0); }
+
+  .loader {
+    display: flex; flex-direction: column; align-items: center; gap: 0.85rem;
+    transition: opacity 0.6s ease;
+  }
+  .loader.hidden { opacity: 0; pointer-events: none; }
+  .track {
+    width: min(70vw, 16rem); height: 3px; border-radius: 3px;
+    background: var(--track); overflow: hidden;
+  }
+  .bar {
+    height: 100%; width: 0%; border-radius: 3px;
+    background: linear-gradient(90deg, var(--sage), var(--gold));
+    transition: width 0.25s ease;
+  }
+  .label {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    text-transform: uppercase; letter-spacing: 0.36em;
+    font-size: 0.66rem; font-weight: 600; color: var(--ink-soft); text-indent: 0.36em;
+  }
+  .label .pct { color: var(--gold); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .blur, .full, .bar, .loader { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+  <h1 class="title">Альбом <em>«Прошлое Лето»</em></h1>
+
+  <figure class="stage">
+    <div class="photo-wrap" id="wrap">
+      <img class="blur" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA0JCgsKCA0LCgsODg0PEyAVExISEyccHhcgLikxMC4pLSwzOko+MzZGNywtQFdBRkxOUlNSMj5aYVpQYEpRUk//2wBDAQ4ODhMREyYVFSZPNS01T09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0//wAARCAAeABgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDbi16KYlnvwvGSCcYq9bazYowJvNxPcdK4q30qO2UyzTCfyxkDZ/8AXq7BLDJB5awM04f/AF2OF9/SuRT5tUzpUEtzvItWtHQN5q0VxE1rBCSHldSOTsbA/Wiodea0L9lTepQt7ksojEjE9ckYNLbXrW+6BFP7wn7pxz7+1YsV/LE24dTTopWnvEAJUtwPrWkFyxaMW7zTNzL3T72ZEwoADHiis2GOeWcwpIo2NsyR1orF023c05kf/9k=" alt="">
+      <img class="full" id="full"
+           src="photo-web.webp"
+           alt="Семья из пяти человек обнимается на лугу с горами на закате">
+    </div>
+  </figure>
+
+  <div class="loader" id="loader">
+    <div class="track"><div class="bar" id="bar"></div></div>
+    <div class="label">загрузка <span class="pct" id="pct">0%</span></div>
+  </div>
+
+<script>
+  (function () {
+    var full = document.getElementById('full');
+    var wrap = document.getElementById('wrap');
+    var loader = document.getElementById('loader');
+    var bar = document.getElementById('bar');
+    var pct = document.getElementById('pct');
+
+    var imgReady = false, p = 0, start = null;
+    var DURATION = 600000;   // длительность загрузки, мс
+
+    function reveal() {
+      full.classList.add('loaded');
+      wrap.classList.add('done');
+      loader.classList.add('hidden');
+    }
+    full.addEventListener('load', function () { imgReady = true; });
+    if (full.complete && full.naturalWidth) imgReady = true;
+
+    function tick(now) {
+      if (!start) start = now;
+      p = Math.min(100, Math.round(((now - start) / DURATION) * 100));
+      bar.style.width = p + '%';
+      pct.textContent = p + '%';
+      if (p >= 100 && imgReady) { setTimeout(reveal, 250); return; }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
+</script>
+
+</body>
+</html>
